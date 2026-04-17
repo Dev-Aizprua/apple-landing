@@ -9,13 +9,12 @@
     :root {
       --white: #ffffff; --off-white: #f5f5f7; --black: #1d1d1f;
       --gray: #6e6e73; --blue: #0071e3; --blue-hover: #0077ed;
-      --nav-bg: rgba(255,255,255,0.85);
     }
     html { scroll-behavior: smooth; }
     body { font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif; background: var(--white); color: var(--black); overflow-x: hidden; }
 
     /* NAV */
-    nav { position: sticky; top: 0; z-index: 200; background: var(--nav-bg); backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid rgba(0,0,0,.08); display: flex; align-items: center; justify-content: space-between; padding: 0 22px; height: 44px; }
+    nav { position: sticky; top: 0; z-index: 200; background: rgba(255,255,255,0.85); backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid rgba(0,0,0,.08); display: flex; align-items: center; justify-content: space-between; padding: 0 22px; height: 44px; }
     nav .logo svg { width: 18px; height: 22px; fill: var(--black); display: block; }
     nav ul { display: flex; list-style: none; }
     nav ul li a { display: block; padding: 0 10px; line-height: 44px; font-size: 12px; color: var(--black); text-decoration: none; opacity: .8; transition: opacity .15s; }
@@ -34,7 +33,7 @@
     .btn-outline-white { border: 1px solid rgba(255,255,255,.6); color: #fff; padding: 10px 22px; border-radius: 980px; font-size: 17px; background: transparent; text-decoration: none; cursor: pointer; transition: background .2s; display: inline-block; }
     .btn-outline-white:hover { background: rgba(255,255,255,.12); }
 
-    /* SECCIONES HERO */
+    /* SECCIONES */
     section { position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; text-align: center; }
     .hero-iphone { background: var(--off-white); padding: 60px 20px 0; min-height: 100svh; }
     .hero-iphone .eyebrow { font-size: clamp(28px,6vw,56px); font-weight: 700; letter-spacing: -.5px; }
@@ -42,20 +41,16 @@
     .cta-row { margin-top: 22px; display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
     .phones-img { margin-top: 40px; width: min(600px, 90vw); animation: floatUp 1.2s cubic-bezier(.22,.61,.36,1) both; }
     @keyframes floatUp { from { transform: translateY(60px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
     .hero-macbook { background: #000; padding: 80px 20px; min-height: 60svh; justify-content: center; }
     .hero-macbook .eyebrow { font-size: clamp(32px,6vw,64px); font-weight: 700; color: #fff; }
     .hero-macbook .tagline { margin-top: 8px; font-size: clamp(19px,3vw,32px); color: rgba(255,255,255,.75); }
     .hero-macbook .sub { margin-top: 4px; font-size: clamp(14px,2vw,19px); color: rgba(255,255,255,.4); }
     .macbook-img { margin-top: 50px; width: min(700px, 85vw); opacity: 0; animation: fadeIn 1s .3s ease both; }
     @keyframes fadeIn { from { opacity: 0; transform: scale(.97); } to { opacity: 1; transform: scale(1); } }
-
     .hero-ipad { background: linear-gradient(160deg,#e8f0ff 0%,#f0e8ff 100%); padding: 70px 20px 0; min-height: 70svh; }
     .hero-ipad .eyebrow { font-size: clamp(30px,6vw,60px); font-weight: 700; }
     .hero-ipad .tagline { margin-top: 8px; font-size: clamp(17px,2.8vw,28px); opacity: .75; }
     .ipad-img { margin-top: 44px; width: min(500px, 85vw); animation: floatUp 1s .2s cubic-bezier(.22,.61,.36,1) both; }
-
-    /* GRID */
     .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px,90vw),1fr)); gap: 12px; padding: 12px; background: var(--off-white); }
     .grid-card { border-radius: 18px; overflow: hidden; background: var(--white); padding: 40px 28px 28px; text-align: center; display: flex; flex-direction: column; align-items: center; min-height: 340px; cursor: pointer; transition: transform .3s; }
     .grid-card:hover { transform: scale(1.01); }
@@ -68,9 +63,7 @@
     .card-sub { font-size: 15px; color: var(--gray); margin-top: 6px; max-width: 240px; }
     .grid-card.dark .card-sub { color: rgba(255,255,255,.55); }
     .card-ctas { display: flex; gap: 14px; margin-top: 14px; flex-wrap: wrap; justify-content: center; }
-    .card-img { margin-top: auto; padding-top: 20px; width: min(200px, 70%); object-fit: contain; }
-
-    /* FOOTER */
+    .card-img { margin-top: auto; padding-top: 20px; width: min(200px, 70%); }
     footer { background: var(--off-white); border-top: 1px solid rgba(0,0,0,.1); padding: 28px 22px 40px; font-size: 12px; color: var(--gray); }
     footer .footer-legal { padding-bottom: 12px; border-bottom: 1px solid rgba(0,0,0,.1); line-height: 1.6; }
     footer .footer-links { display: flex; flex-wrap: wrap; margin-top: 16px; }
@@ -80,17 +73,16 @@
     footer .footer-bottom a { color: var(--gray); text-decoration: none; }
     footer .footer-bottom a:hover { text-decoration: underline; }
 
-    /* MODAL BASE */
+    /* MODALES */
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 999; display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity .25s; }
     .modal-overlay.open { opacity: 1; pointer-events: all; }
     .modal { background: #fff; border-radius: 20px; padding: 40px 36px; max-width: 440px; width: 100%; position: relative; transform: scale(.95); transition: transform .25s; }
     .modal-overlay.open .modal { transform: scale(1); }
     .modal-close { position: absolute; top: 16px; right: 16px; background: #f0f0f5; border: none; border-radius: 50%; width: 30px; height: 30px; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #666; }
-    .modal-close:hover { background: #e0e0e8; }
     .modal h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
     .modal p { font-size: 15px; color: var(--gray); margin-bottom: 24px; }
     .modal .field { margin-bottom: 14px; }
-    .modal label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 5px; color: var(--black); }
+    .modal label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 5px; }
     .modal input, .modal textarea { width: 100%; padding: 10px 14px; border: 1px solid #d0d0d8; border-radius: 10px; font-size: 15px; font-family: inherit; outline: none; transition: border .2s; }
     .modal input:focus, .modal textarea:focus { border-color: var(--blue); }
     .modal textarea { resize: vertical; min-height: 100px; }
@@ -104,25 +96,23 @@
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <div class="logo">
     <svg viewBox="0 0 814 1000"><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-57.8-155.5-127.4C46 383.8 -7.7 255.5 -7.7 130.4c0-73.7 25-142.9 70.3-191.2 28-29.8 68.7-46.4 111-46.4 85.7 0 146.6 57.7 191.3 57.7 42.8 0 110.8-60.8 208-60.8l-.2 4.4zm-37.8-152.4c18.3-21.6 31.7-51.5 31.7-81.4 0-4.2-.3-8.4-.9-12.6-30.1 1.2-66 20.1-88.2 43.3-18 19.4-34.6 49.2-34.6 79.5 0 4.5.6 9 1 10.4 1.9.3 5.1.6 8.3.6 27.1 0 60.5-18 82.7-39.8z"/></svg>
   </div>
   <ul>
-    <li><a href="#" onclick="trackClick('nav','tienda')">Tienda</a></li>
-    <li><a href="#hero-iphone" onclick="trackClick('nav','iphone')">iPhone</a></li>
-    <li><a href="#hero-macbook" onclick="trackClick('nav','mac')">Mac</a></li>
-    <li><a href="#hero-ipad" onclick="trackClick('nav','ipad')">iPad</a></li>
-    <li><a href="#hero-watch" onclick="trackClick('nav','watch')">Watch</a></li>
-    <li><a href="#contacto-btn" onclick="openContacto()">Soporte</a></li>
+    <li><a href="#hero-iphone" onclick="track('nav','iphone')">iPhone</a></li>
+    <li><a href="#hero-macbook" onclick="track('nav','mac')">Mac</a></li>
+    <li><a href="#hero-ipad" onclick="track('nav','ipad')">iPad</a></li>
+    <li><a href="#hero-watch" onclick="track('nav','watch')">Watch</a></li>
+    <li><a href="#" onclick="openContacto()">Soporte</a></li>
   </ul>
   <div class="nav-icons">
     <svg viewBox="0 0 16 16"><path d="M6.5 1a5.5 5.5 0 0 1 4.383 8.823l3.896 3.9-.707.707-3.9-3.896A5.5 5.5 0 1 1 6.5 1zm0 1a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9z"/></svg>
   </div>
 </nav>
 
-<!-- HERO iPHONE -->
+<!-- iPhone -->
 <section class="hero-iphone" id="hero-iphone">
   <div class="eyebrow">iPhone</div>
   <p class="tagline">Dile hola a la nueva generación de iPhone.</p>
@@ -150,7 +140,7 @@
   </svg>
 </section>
 
-<!-- HERO MacBook Neo -->
+<!-- MacBook Neo -->
 <section class="hero-macbook" id="hero-macbook">
   <div class="eyebrow">MacBook Neo</div>
   <p class="tagline">Una Mac increíble.<br>Un precio sorprendente.</p>
@@ -169,7 +159,7 @@
   </svg>
 </section>
 
-<!-- HERO iPad -->
+<!-- iPad -->
 <section class="hero-ipad" id="hero-ipad">
   <div class="eyebrow">iPad Pro</div>
   <p class="tagline">Absolutamente deslumbrante. Increíblemente capaz.</p>
@@ -186,9 +176,8 @@
   </svg>
 </section>
 
-<!-- GRID -->
+<!-- Grid -->
 <div class="product-grid" id="hero-watch">
-
   <div class="grid-card dark">
     <span class="card-label">Nuevo</span>
     <span class="card-title">Apple Watch Series 10</span>
@@ -205,7 +194,6 @@
       <rect x="68" y="24" width="64" height="80" rx="10" fill="#c0302a" transform="rotate(180 100 64)"/>
     </svg>
   </div>
-
   <div class="grid-card gradient-a">
     <span class="card-label">Desde $1,099</span>
     <span class="card-title">AirPods Pro</span>
@@ -224,7 +212,6 @@
       <line x1="115" y1="35" x2="115" y2="15" stroke="#d0d0d5" stroke-width="4" stroke-linecap="round"/>
     </svg>
   </div>
-
   <div class="grid-card gradient-b">
     <span class="card-label">Potencia sin límites</span>
     <span class="card-title">Mac mini</span>
@@ -237,230 +224,233 @@
       <rect x="30" y="100" width="140" height="70" rx="14" fill="#c8c8cc"/>
       <rect x="35" y="104" width="130" height="62" rx="11" fill="#e0e0e5"/>
       <circle cx="155" cy="162" r="5" fill="#a0a0a8"/>
-      <rect x="40" y="108" width="80" height="6" rx="3" fill="#c8c8cc"/>
     </svg>
   </div>
-
 </div>
 
-<!-- FOOTER -->
 <footer>
-  <p class="footer-legal">
-    * Los precios son referenciales. Consulta disponibilidad en tu país.<br>
-    Apple Intelligence disponible en iPhone 16, iPhone 15 Pro con iOS 18.1 o posterior.
-  </p>
+  <p class="footer-legal">* Los precios son referenciales. Consulta disponibilidad en tu país.</p>
   <div class="footer-links">
     <a href="#" onclick="openComprar('iPhone 16','$999')">Comprar iPhone</a>
     <a href="#" onclick="openWaitlist()">Lista MacBook Neo</a>
     <a href="#" onclick="openComprar('iPad Pro','$1,299')">Comprar iPad</a>
-    <a href="#" onclick="openComprar('Apple Watch','$399')">Apple Watch</a>
-    <a href="#" onclick="openComprar('AirPods Pro','$1,099')">AirPods</a>
     <a href="#" onclick="openContacto()">Contacto</a>
   </div>
   <div class="footer-bottom">
     <span>Copyright © 2026 Apple Inc. Todos los derechos reservados.</span>
-    <span>
-      <a href="#">Privacidad</a> &nbsp;|&nbsp;
-      <a href="#">Condiciones</a> &nbsp;|&nbsp;
-      <a href="#" onclick="openContacto()">Soporte</a>
-    </span>
+    <span><a href="#">Privacidad</a> &nbsp;|&nbsp; <a href="#" onclick="openContacto()">Soporte</a></span>
   </div>
 </footer>
 
-<!-- ══ MODAL: MÁS INFORMACIÓN ══ -->
+<!-- MODAL: Info -->
 <div class="modal-overlay" id="modal-info">
   <div class="modal">
     <button class="modal-close" onclick="closeModal('modal-info')">✕</button>
     <h2 id="info-title">Producto</h2>
-    <p id="info-desc">Descripción del producto.</p>
+    <p id="info-desc"></p>
     <button class="btn-fill" style="width:100%;padding:12px;font-size:16px;" onclick="closeModal('modal-info')">Entendido</button>
   </div>
 </div>
 
-<!-- ══ MODAL: COMPRAR ══ -->
+<!-- MODAL: Comprar -->
 <div class="modal-overlay" id="modal-comprar">
   <div class="modal">
     <button class="modal-close" onclick="closeModal('modal-comprar')">✕</button>
     <h2 id="comprar-title">Comprar</h2>
-    <p id="comprar-precio" style="font-size:28px;font-weight:700;color:var(--black);margin-bottom:8px;"></p>
-    <p style="color:var(--gray);margin-bottom:24px;">Completa tu compra de forma segura. Envío gratis en pedidos sobre $500.</p>
-    <div class="field"><label>Nombre completo</label><input type="text" id="buy-nombre" placeholder="Tu nombre"/></div>
-    <div class="field"><label>Correo electrónico</label><input type="email" id="buy-email" placeholder="correo@ejemplo.com"/></div>
+    <p id="comprar-precio" style="font-size:28px;font-weight:700;margin-bottom:8px;"></p>
+    <p>Completa tu compra. Envío gratis en pedidos sobre $500.</p>
+    <div class="field" style="margin-top:20px;"><label>Nombre completo</label><input type="text" id="buy-nombre" placeholder="Tu nombre"/></div>
+    <div class="field"><label>Correo electrónico</label><input type="email" id="buy-email" placeholder="correo@ejemplo.com" oninput="setUserEmail(this.value)"/></div>
     <button class="submit-btn" onclick="submitCompra()">Continuar al pago →</button>
   </div>
 </div>
 
-<!-- ══ MODAL: LISTA DE ESPERA ══ -->
+<!-- MODAL: Waitlist -->
 <div class="modal-overlay" id="modal-waitlist">
   <div class="modal">
     <button class="modal-close" onclick="closeModal('modal-waitlist')">✕</button>
     <h2>MacBook Neo</h2>
-    <p>Sé el primero en saber cuando esté disponible. Te avisamos por correo.</p>
-    <div class="field"><label>Correo electrónico</label><input type="email" id="waitlist-email" placeholder="correo@ejemplo.com"/></div>
+    <p>Sé el primero en saber cuando esté disponible.</p>
+    <div class="field" style="margin-top:20px;"><label>Correo electrónico</label><input type="email" id="waitlist-email" placeholder="correo@ejemplo.com" oninput="setUserEmail(this.value)"/></div>
     <button class="submit-btn" id="waitlist-btn" onclick="submitWaitlist()">Unirme a la lista</button>
   </div>
 </div>
 
-<!-- ══ MODAL: CONTACTO ══ -->
+<!-- MODAL: Contacto -->
 <div class="modal-overlay" id="modal-contacto">
   <div class="modal">
     <button class="modal-close" onclick="closeModal('modal-contacto')">✕</button>
     <h2>Contacto / Soporte</h2>
-    <p>¿Tienes preguntas? Escríbenos y te respondemos en menos de 24 horas.</p>
-    <div class="field"><label>Nombre</label><input type="text" id="c-nombre" placeholder="Tu nombre"/></div>
-    <div class="field"><label>Email</label><input type="email" id="c-email" placeholder="correo@ejemplo.com"/></div>
+    <p>¿Tienes preguntas? Respondemos en 24 horas.</p>
+    <div class="field" style="margin-top:20px;"><label>Nombre</label><input type="text" id="c-nombre" placeholder="Tu nombre"/></div>
+    <div class="field"><label>Email</label><input type="email" id="c-email" placeholder="correo@ejemplo.com" oninput="setUserEmail(this.value)"/></div>
     <div class="field"><label>Mensaje</label><textarea id="c-mensaje" placeholder="¿En qué podemos ayudarte?"></textarea></div>
     <button class="submit-btn" id="contacto-btn" onclick="submitContacto()">Enviar mensaje</button>
   </div>
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
-  // ── Utils
-  function openModal(id)  { document.getElementById(id).classList.add('open'); }
-  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg; t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3000);
-  }
+// ════════════════════════════════════════
+// SISTEMA DE RASTREO — Hoja de Ruta 2
+// ════════════════════════════════════════
+const LS_EMAIL = 'al_user_email'; // clave en localStorage
 
-  // Cerrar al click fuera
-  document.querySelectorAll('.modal-overlay').forEach(o => {
-    o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
+// Recuperar email guardado (si el usuario ya se registró antes)
+let userEmail = localStorage.getItem(LS_EMAIL) || null;
+
+// Pre-rellenar campos si ya tenemos el email
+if (userEmail) {
+  document.addEventListener('DOMContentLoaded', () => {
+    ['buy-email','waitlist-email','c-email'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = userEmail;
+    });
   });
+}
 
-  // ── Track clicks
-  async function trackClick(seccion, accion) {
-    try {
-      await fetch('/api/clicks', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ seccion, accion })
-      });
-    } catch(_) {}
+// Guardar email cuando el usuario lo ingresa en cualquier campo
+function setUserEmail(val) {
+  const v = val.trim().toLowerCase();
+  if (v.includes('@')) {
+    userEmail = v;
+    localStorage.setItem(LS_EMAIL, v);
+    // Propagar a otros campos abiertos
+    ['buy-email','waitlist-email','c-email'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el && !el.value) el.value = v;
+    });
   }
+}
 
-  // ── Más información
-  function openMasInfo(titulo, desc) {
-    trackClick(titulo.toLowerCase().replace(/ /g,'_'), 'mas_info');
-    document.getElementById('info-title').textContent = titulo;
-    document.getElementById('info-desc').textContent = desc;
-    openModal('modal-info');
-  }
+// TRACKING: envía clic CON email si está disponible
+async function track(seccion, accion) {
+  try {
+    await fetch('/api/clicks', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ seccion, accion, email: userEmail })
+    });
+  } catch(_) {}
+}
 
-  // ── Comprar
-  let productoActual = '';
-  function openComprar(producto, precio) {
-    trackClick(producto.toLowerCase().replace(/ /g,'_'), 'comprar');
-    productoActual = producto;
-    document.getElementById('comprar-title').textContent = 'Comprar ' + producto;
-    document.getElementById('comprar-precio').textContent = precio;
-    openModal('modal-comprar');
-  }
-  async function submitCompra() {
-    const nombre = document.getElementById('buy-nombre').value.trim();
-    const email  = document.getElementById('buy-email').value.trim();
-    if (!nombre || !email) { showToast('Por favor completa todos los campos'); return; }
-    // Registramos como contacto en D1
-    try {
-      await fetch('/api/contacto', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nombre, email, mensaje: 'Interés de compra: ' + productoActual })
-      });
-    } catch(_) {}
-    closeModal('modal-comprar');
-    showToast('¡Gracias ' + nombre + '! Te contactamos para finalizar tu pedido.');
-  }
+// ════════════════════════════════════════
+// UI HELPERS
+// ════════════════════════════════════════
+function openModal(id)  { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3200);
+}
+document.querySelectorAll('.modal-overlay').forEach(o => {
+  o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
+});
 
-  // ── Waitlist
-  async function openWaitlist() {
-    trackClick('macbook_neo', 'waitlist');
-    openModal('modal-waitlist');
-    // Mostrar contador
-    try {
-      const r = await fetch('/api/waitlist');
-      const d = await r.json();
-      if (d.total) {
-        document.getElementById('waitlist-count').innerHTML =
-          '<span class="counter-badge">' + d.total + ' personas en la lista de espera</span>';
-      }
-    } catch(_) {}
-  }
-  async function submitWaitlist() {
-    const email = document.getElementById('waitlist-email').value.trim();
-    if (!email) { showToast('Ingresa tu correo electrónico'); return; }
-    const btn = document.getElementById('waitlist-btn');
-    btn.disabled = true; btn.textContent = 'Guardando...';
-    try {
-      const r = await fetch('/api/waitlist', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, producto: 'MacBook Neo' })
-      });
-      const d = await r.json();
-      closeModal('modal-waitlist');
-      if (d.ok) {
-        showToast('¡Listo! Te avisamos cuando el MacBook Neo esté disponible.');
-        if (d.total) {
-          document.getElementById('waitlist-count').innerHTML =
-            '<span class="counter-badge">' + d.total + ' personas en la lista de espera</span>';
-        }
-      } else {
-        showToast(d.error || 'Ocurrió un error. Intenta de nuevo.');
-      }
-    } catch(_) {
-      showToast('Error de conexión. Intenta de nuevo.');
-    }
-    btn.disabled = false; btn.textContent = 'Unirme a la lista';
-  }
+// ════════════════════════════════════════
+// ACCIONES DE BOTONES
+// ════════════════════════════════════════
+function openMasInfo(titulo, desc) {
+  track(titulo.toLowerCase().replace(/ /g,'_'), 'mas_info');
+  document.getElementById('info-title').textContent = titulo;
+  document.getElementById('info-desc').textContent = desc;
+  openModal('modal-info');
+}
 
-  // ── Contacto
-  function openContacto() {
-    trackClick('footer', 'contacto');
-    openModal('modal-contacto');
-  }
-  async function submitContacto() {
-    const nombre  = document.getElementById('c-nombre').value.trim();
-    const email   = document.getElementById('c-email').value.trim();
-    const mensaje = document.getElementById('c-mensaje').value.trim();
-    if (!nombre || !email || !mensaje) { showToast('Por favor completa todos los campos'); return; }
-    const btn = document.getElementById('contacto-btn');
-    btn.disabled = true; btn.textContent = 'Enviando...';
-    try {
-      const r = await fetch('/api/contacto', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nombre, email, mensaje })
-      });
-      const d = await r.json();
-      closeModal('modal-contacto');
-      showToast(d.ok ? '¡Mensaje enviado! Te respondemos en 24 horas.' : (d.error || 'Error al enviar'));
-      if (d.ok) {
-        document.getElementById('c-nombre').value = '';
-        document.getElementById('c-email').value = '';
-        document.getElementById('c-mensaje').value = '';
-      }
-    } catch(_) {
-      showToast('Error de conexión. Intenta de nuevo.');
-    }
-    btn.disabled = false; btn.textContent = 'Enviar mensaje';
-  }
+let productoActual = '';
+function openComprar(producto, precio) {
+  track(producto.toLowerCase().replace(/ /g,'_'), 'comprar');
+  productoActual = producto;
+  document.getElementById('comprar-title').textContent = 'Comprar ' + producto;
+  document.getElementById('comprar-precio').textContent = precio;
+  if (userEmail) document.getElementById('buy-email').value = userEmail;
+  openModal('modal-comprar');
+}
+async function submitCompra() {
+  const nombre = document.getElementById('buy-nombre').value.trim();
+  const email  = document.getElementById('buy-email').value.trim();
+  if (!nombre || !email) { showToast('Por favor completa todos los campos'); return; }
+  setUserEmail(email);
+  try {
+    await fetch('/api/contacto', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nombre, email, mensaje: 'Interés de compra: ' + productoActual })
+    });
+  } catch(_) {}
+  closeModal('modal-comprar');
+  showToast('¡Gracias ' + nombre + '! Te contactamos para finalizar tu pedido.');
+}
 
-  // Cargar contador al inicio
-  (async () => {
-    try {
-      const r = await fetch('/api/waitlist');
-      const d = await r.json();
-      if (d.total > 0) {
-        document.getElementById('waitlist-count').innerHTML =
-          '<span class="counter-badge">' + d.total + ' personas en la lista de espera</span>';
-      }
-    } catch(_) {}
-  })();
+async function openWaitlist() {
+  track('macbook_neo', 'waitlist');
+  if (userEmail) document.getElementById('waitlist-email').value = userEmail;
+  openModal('modal-waitlist');
+  try {
+    const r = await fetch('/api/waitlist');
+    const d = await r.json();
+    if (d.total) document.getElementById('waitlist-count').innerHTML =
+      '<span class="counter-badge">' + d.total + ' personas en la lista</span>';
+  } catch(_) {}
+}
+async function submitWaitlist() {
+  const email = document.getElementById('waitlist-email').value.trim();
+  if (!email) { showToast('Ingresa tu correo'); return; }
+  setUserEmail(email);
+  const btn = document.getElementById('waitlist-btn');
+  btn.disabled = true; btn.textContent = 'Guardando...';
+  try {
+    const r = await fetch('/api/waitlist', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, producto: 'MacBook Neo' })
+    });
+    const d = await r.json();
+    closeModal('modal-waitlist');
+    showToast(d.ok ? '¡Listo! Te avisamos cuando esté disponible.' : (d.error || 'Error'));
+    if (d.total) document.getElementById('waitlist-count').innerHTML =
+      '<span class="counter-badge">' + d.total + ' personas en la lista</span>';
+  } catch(_) { showToast('Error de conexión'); }
+  btn.disabled = false; btn.textContent = 'Unirme a la lista';
+}
+
+function openContacto() {
+  track('footer', 'contacto');
+  if (userEmail) document.getElementById('c-email').value = userEmail;
+  openModal('modal-contacto');
+}
+async function submitContacto() {
+  const nombre  = document.getElementById('c-nombre').value.trim();
+  const email   = document.getElementById('c-email').value.trim();
+  const mensaje = document.getElementById('c-mensaje').value.trim();
+  if (!nombre || !email || !mensaje) { showToast('Completa todos los campos'); return; }
+  setUserEmail(email);
+  const btn = document.getElementById('contacto-btn');
+  btn.disabled = true; btn.textContent = 'Enviando...';
+  try {
+    const r = await fetch('/api/contacto', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nombre, email, mensaje })
+    });
+    const d = await r.json();
+    closeModal('modal-contacto');
+    showToast(d.ok ? '¡Mensaje enviado! Te respondemos en 24 horas.' : (d.error||'Error'));
+  } catch(_) { showToast('Error de conexión'); }
+  btn.disabled = false; btn.textContent = 'Enviar mensaje';
+}
+
+// Contador inicial de waitlist
+(async () => {
+  try {
+    const r = await fetch('/api/waitlist');
+    const d = await r.json();
+    if (d.total > 0) document.getElementById('waitlist-count').innerHTML =
+      '<span class="counter-badge">' + d.total + ' personas en la lista</span>';
+  } catch(_) {}
+})();
 </script>
 </body>
 </html>

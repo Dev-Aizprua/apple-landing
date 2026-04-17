@@ -1,9 +1,12 @@
 name = "apple-landing"
 pages_build_output_dir = "./public"
-compatibility_date = "2024-01-01"
-account_id = "7a8693195186b717e16ee0eeebea5e6c"
+compatibility_date = "2024-04-16"
 
 [[d1_databases]]
 binding = "DB"
 database_name = "apple-db"
 database_id = "0335aa94-18e6-4dda-be1e-01eece78198c"
+
+[vars]
+# Esta es solo para pruebas locales (la real va por 'secret put')
+ADMIN_PASSWORD = "desarrollo_local"

@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Control Center — Apple Landing</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080c10;
+  --surface:#0d1117;
+  --surface2:#131920;
+  --border:#1e2830;
+  --border-bright:#2a3a48;
+  --accent:#00d4ff;
+  --accent2:#7b61ff;
+  --accent3:#00ff94;
+  --warn:#ff6b35;
+  --text:#e8edf2;
+  --text2:#8899a8;
+  --text3:#4a5a68;
+  --red:#ff4560;
+  --gold:#f0b429;
+}
+html{height:100%}
+body{
+  font-family:'Syne',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+/* ── GRID DE FONDO */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(0,212,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,212,255,.025) 1px,transparent 1px);
+  background-size:40px 40px;
+  pointer-events:none;z-index:0;
+}
+
+/* ── LOGIN SCREEN */
+#login-screen{
+  position:fixed;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--bg);z-index:1000;
+  flex-direction:column;gap:0;
+}
+.login-box{
+  background:var(--surface);
+  border:1px solid var(--border-bright);
+  border-radius:20px;
+  padding:48px 44px;
+  width:min(420px,90vw);
+  position:relative;
+  overflow:hidden;
+}
+.login-box::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);
+}
+.login-logo{
+  font-size:32px;font-weight:800;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:6px;text-align:center;
+}
+.login-sub{font-size:13px;color:var(--text2);text-align:center;margin-bottom:32px;font-family:'JetBrains Mono',monospace;}
+.login-label{font-size:11px;font-weight:600;letter-spacing:.1em;color:var(--text2);margin-bottom:8px;text-transform:uppercase;}
+.login-input{
+  width:100%;padding:12px 16px;
+  background:var(--bg);
+  border:1px solid var(--border-bright);
+  border-radius:10px;
+  color:var(--text);
+  font-size:15px;font-family:'JetBrains Mono',monospace;
+  outline:none;transition:border .2s;
+  margin-bottom:20px;
+  letter-spacing:.1em;
+}
+.login-input:focus{border-color:var(--accent);}
+.login-btn{
+  width:100%;padding:13px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  border:none;border-radius:10px;
+  color:#000;font-size:15px;font-weight:700;
+  font-family:'Syne',sans-serif;
+  cursor:pointer;transition:opacity .2s;
+  letter-spacing:.04em;
+}
+.login-btn:hover{opacity:.9;}
+.login-error{
+  font-size:13px;color:var(--red);
+  text-align:center;margin-top:12px;
+  font-family:'JetBrains Mono',monospace;
+  min-height:20px;
+}
+
+/* ── DASHBOARD */
+#dashboard{display:none;position:relative;z-index:1;}
+
+/* TOPBAR */
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(8,12,16,.9);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;height:56px;
+}
+.topbar-brand{
+  font-size:16px;font-weight:800;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  letter-spacing:.02em;
+}
+.topbar-right{display:flex;align-items:center;gap:16px;}
+.topbar-time{font-size:12px;color:var(--text3);font-family:'JetBrains Mono',monospace;}
+.topbar-status{
+  display:flex;align-items:center;gap:6px;
+  font-size:12px;color:var(--accent3);
+  font-family:'JetBrains Mono',monospace;
+}
+.dot-live{width:7px;height:7px;border-radius:50%;background:var(--accent3);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(0,255,148,.4)}50%{box-shadow:0 0 0 6px rgba(0,255,148,0)}}
+.btn-logout{
+  background:transparent;border:1px solid var(--border-bright);
+  color:var(--text2);padding:6px 14px;border-radius:8px;
+  font-size:12px;cursor:pointer;transition:all .2s;
+  font-family:'Syne',sans-serif;
+}
+.btn-logout:hover{border-color:var(--red);color:var(--red);}
+
+/* NAV TABS */
+.nav-tabs{
+  display:flex;gap:0;padding:0 28px;
+  border-bottom:1px solid var(--border);
+  background:var(--surface);
+}
+.nav-tab{
+  padding:14px 22px;font-size:13px;font-weight:600;
+  color:var(--text2);cursor:pointer;border:none;background:transparent;
+  border-bottom:2px solid transparent;
+  transition:all .2s;letter-spacing:.02em;
+  font-family:'Syne',sans-serif;
+}
+.nav-tab:hover{color:var(--text);}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.tab-badge{
+  display:inline-block;background:var(--accent);color:#000;
+  font-size:10px;font-weight:700;padding:1px 6px;border-radius:20px;
+  margin-left:6px;vertical-align:middle;
+}
+
+/* CONTENIDO */
+.content{padding:28px;display:none;}
+.content.active{display:block;}
+
+/* KPI CARDS */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:28px;}
+.kpi-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;padding:24px;
+  position:relative;overflow:hidden;
+  transition:border-color .2s,transform .2s;
+  cursor:default;
+}
+.kpi-card:hover{border-color:var(--border-bright);transform:translateY(-2px);}
+.kpi-card::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+}
+.kpi-card.c-cyan::after{background:linear-gradient(90deg,transparent,var(--accent),transparent);}
+.kpi-card.c-purple::after{background:linear-gradient(90deg,transparent,var(--accent2),transparent);}
+.kpi-card.c-green::after{background:linear-gradient(90deg,transparent,var(--accent3),transparent);}
+.kpi-card.c-warn::after{background:linear-gradient(90deg,transparent,var(--warn),transparent);}
+.kpi-label{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;}
+.kpi-value{font-size:44px;font-weight:800;line-height:1;margin-bottom:6px;}
+.kpi-card.c-cyan .kpi-value{color:var(--accent);}
+.kpi-card.c-purple .kpi-value{color:var(--accent2);}
+.kpi-card.c-green .kpi-value{color:var(--accent3);}
+.kpi-card.c-warn .kpi-value{color:var(--warn);}
+.kpi-sub{font-size:12px;color:var(--text2);}
+
+/* CHARTS */
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;}
+@media(max-width:900px){.charts-grid{grid-template-columns:1fr;}}
+.chart-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:16px;padding:24px;
+}
+.chart-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px;letter-spacing:.04em;}
+.chart-sub{font-size:11px;color:var(--text3);margin-bottom:20px;font-family:'JetBrains Mono',monospace;}
+.chart-wrap{position:relative;height:220px;}
+
+/* TABLA MENSAJES */
+.section-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:16px;
+}
+.section-title{font-size:15px;font-weight:700;letter-spacing:.04em;}
+.btn-export{
+  background:transparent;
+  border:1px solid var(--accent3);color:var(--accent3);
+  padding:8px 18px;border-radius:8px;font-size:12px;font-weight:600;
+  cursor:pointer;transition:all .2s;font-family:'Syne',sans-serif;
+  letter-spacing:.04em;
+}
+.btn-export:hover{background:var(--accent3);color:#000;}
+
+.mensajes-list{display:flex;flex-direction:column;gap:10px;}
+.mensaje-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:12px;padding:18px 20px;
+  display:grid;grid-template-columns:auto 1fr auto;
+  gap:16px;align-items:start;
+  transition:border-color .2s;
+  cursor:pointer;
+}
+.mensaje-card:hover{border-color:var(--border-bright);}
+.mensaje-card.leido{opacity:.55;}
+.msg-avatar{
+  width:40px;height:40px;border-radius:10px;
+  background:linear-gradient(135deg,var(--accent2),var(--accent));
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:800;color:#000;flex-shrink:0;
+}
+.msg-nombre{font-size:14px;font-weight:700;margin-bottom:2px;}
+.msg-email{font-size:11px;color:var(--accent);font-family:'JetBrains Mono',monospace;margin-bottom:6px;}
+.msg-texto{font-size:13px;color:var(--text2);line-height:1.5;}
+.msg-meta{font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;white-space:nowrap;text-align:right;}
+.msg-unread{width:8px;height:8px;border-radius:50%;background:var(--accent);display:inline-block;margin-right:6px;vertical-align:middle;}
+
+/* INTELIGENCIA */
+.intel-table{width:100%;border-collapse:collapse;}
+.intel-table th{
+  font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--text3);padding:10px 14px;text-align:left;
+  border-bottom:1px solid var(--border);
+}
+.intel-table td{
+  padding:14px;font-size:13px;color:var(--text);
+  border-bottom:1px solid var(--border);
+}
+.intel-table tr:last-child td{border-bottom:none;}
+.intel-table tr:hover td{background:var(--surface2);}
+.intel-email{color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:12px;}
+.intel-heat{
+  display:flex;align-items:center;gap:8px;
+}
+.heat-bar{height:6px;border-radius:3px;background:linear-gradient(90deg,var(--accent2),var(--accent));min-width:4px;}
+.heat-label{font-size:11px;color:var(--text2);font-family:'JetBrains Mono',monospace;}
+.badge-hot{
+  display:inline-block;background:rgba(255,107,53,.15);
+  border:1px solid var(--warn);color:var(--warn);
+  font-size:10px;padding:2px 8px;border-radius:20px;font-weight:700;
+}
+.badge-warm{
+  display:inline-block;background:rgba(240,180,41,.1);
+  border:1px solid var(--gold);color:var(--gold);
+  font-size:10px;padding:2px 8px;border-radius:20px;font-weight:700;
+}
+.badge-new{
+  display:inline-block;background:rgba(0,212,255,.1);
+  border:1px solid var(--accent);color:var(--accent);
+  font-size:10px;padding:2px 8px;border-radius:20px;font-weight:700;
+}
+.empty-state{
+  text-align:center;padding:48px;color:var(--text3);
+  font-size:14px;font-family:'JetBrains Mono',monospace;
+}
+
+/* WAITLIST TABLE */
+.wl-table{width:100%;border-collapse:collapse;}
+.wl-table th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);}
+.wl-table td{padding:12px 14px;font-size:13px;color:var(--text);border-bottom:1px solid var(--border);}
+.wl-table tr:last-child td{border-bottom:none;}
+.wl-table tr:hover td{background:var(--surface2);}
+.wl-email{color:var(--accent3);font-family:'JetBrains Mono',monospace;font-size:12px;}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border-bright);border-radius:2px;}
+
+/* LOADER */
+.loading-overlay{
+  position:fixed;inset:0;background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  z-index:500;flex-direction:column;gap:16px;
+  transition:opacity .5s;
+}
+.loading-overlay.hidden{opacity:0;pointer-events:none;}
+.loader-ring{
+  width:48px;height:48px;border-radius:50%;
+  border:2px solid var(--border-bright);
+  border-top-color:var(--accent);
+  animation:spin .8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader-text{font-size:12px;color:var(--text3);font-family:'JetBrains Mono',monospace;letter-spacing:.1em;}
+
+/* TOOLTIP */
+.tooltip-wrap{position:relative;display:inline-block;}
+.tooltip{
+  position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);
+  background:var(--surface2);border:1px solid var(--border-bright);
+  color:var(--text);font-size:11px;padding:6px 10px;border-radius:6px;
+  white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .2s;
+  font-family:'JetBrains Mono',monospace;z-index:10;
+}
+.tooltip-wrap:hover .tooltip{opacity:1;}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div class="loading-overlay" id="loader">
+  <div class="loader-ring"></div>
+  <div class="loader-text">INICIALIZANDO SISTEMA...</div>
+</div>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">⬡ CONTROL CENTER</div>
+    <div class="login-sub">apple-landing.pages.dev / admin</div>
+    <div class="login-label">Clave de acceso</div>
+    <input class="login-input" type="password" id="pwd-input" placeholder="••••••••••••" autocomplete="current-password"/>
+    <button class="login-btn" onclick="doLogin()">ACCEDER →</button>
+    <div class="login-error" id="login-error"></div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-brand">⬡ APPLE LANDING — CONTROL CENTER</div>
+    <div class="topbar-right">
+      <div class="topbar-status"><span class="dot-live"></span>LIVE</div>
+      <div class="topbar-time" id="clock">--:--:--</div>
+      <button class="btn-logout" onclick="logout()">SALIR</button>
+    </div>
+  </div>
+
+  <!-- NAV TABS -->
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="switchTab('overview',this)">OVERVIEW</button>
+    <button class="nav-tab" onclick="switchTab('mensajes',this)">BUZÓN <span class="tab-badge" id="unread-badge">0</span></button>
+    <button class="nav-tab" onclick="switchTab('waitlist',this)">WAITLIST</button>
+    <button class="nav-tab" onclick="switchTab('intel',this)">INTEL DE VENTAS</button>
+  </div>
+
+  <!-- TAB: OVERVIEW -->
+  <div class="content active" id="tab-overview">
+    <div class="kpi-grid">
+      <div class="kpi-card c-cyan">
+        <div class="kpi-label">Lista de Espera</div>
+        <div class="kpi-value" id="kpi-waitlist">—</div>
+        <div class="kpi-sub">MacBook Neo subscribers</div>
+      </div>
+      <div class="kpi-card c-purple">
+        <div class="kpi-label">Mensajes</div>
+        <div class="kpi-value" id="kpi-contactos">—</div>
+        <div class="kpi-sub">Total contactos recibidos</div>
+      </div>
+      <div class="kpi-card c-green">
+        <div class="kpi-label">Clics Totales</div>
+        <div class="kpi-value" id="kpi-clics">—</div>
+        <div class="kpi-sub">Interacciones registradas</div>
+      </div>
+      <div class="kpi-card c-warn">
+        <div class="kpi-label">Clientes ID</div>
+        <div class="kpi-value" id="kpi-identified">—</div>
+        <div class="kpi-sub">Usuarios identificados</div>
+      </div>
+    </div>
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-title">CLICS POR SECCIÓN</div>
+        <div class="chart-sub">top productos más explorados</div>
+        <div class="chart-wrap"><canvas id="chart-clicks"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">ACTIVIDAD — ÚLTIMOS 7 DÍAS</div>
+        <div class="chart-sub">clics diarios en la landing</div>
+        <div class="chart-wrap"><canvas id="chart-daily"></canvas></div>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="section-header">
+        <div>
+          <div class="chart-title">TOP PRODUCTOS (CLIENTES IDENTIFICADOS)</div>
+          <div class="chart-sub" style="margin-bottom:0">solo usuarios que dejaron su email</div>
+        </div>
+      </div>
+      <div class="chart-wrap" style="height:180px;"><canvas id="chart-top"></canvas></div>
+    </div>
+  </div>
+
+  <!-- TAB: BUZÓN -->
+  <div class="content" id="tab-mensajes">
+    <div class="section-header">
+      <div class="section-title">BUZÓN DE MENSAJES</div>
+      <button class="btn-export" onclick="exportarCSV('mensajes')">⬇ EXPORTAR CSV</button>
+    </div>
+    <div class="mensajes-list" id="mensajes-list">
+      <div class="empty-state">Cargando mensajes...</div>
+    </div>
+  </div>
+
+  <!-- TAB: WAITLIST -->
+  <div class="content" id="tab-waitlist">
+    <div class="section-header">
+      <div class="section-title">LISTA DE ESPERA — MacBook Neo</div>
+      <button class="btn-export" onclick="exportarCSV('waitlist')">⬇ EXPORTAR CSV</button>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+      <table class="wl-table">
+        <thead><tr><th>#</th><th>Email</th><th>Producto</th><th>Fecha</th></tr></thead>
+        <tbody id="waitlist-body"><tr><td colspan="4" class="empty-state">Cargando...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB: INTEL -->
+  <div class="content" id="tab-intel">
+    <div class="section-header">
+      <div>
+        <div class="section-title">INTELIGENCIA DE VENTAS</div>
+        <div style="font-size:12px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-top:4px;">clientes identificados · rastreo por email</div>
+      </div>
+      <button class="btn-export" onclick="exportarCSV('intel')">⬇ EXPORTAR CSV</button>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+      <table class="intel-table">
+        <thead><tr><th>Cliente</th><th>Temperatura</th><th>Clics totales</th><th>Última visita</th><th>Actividad reciente</th></tr></thead>
+        <tbody id="intel-body"><tr><td colspan="5" class="empty-state">Cargando inteligencia...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+</div><!-- /dashboard -->
+
+<script>
+const TOKEN_KEY = 'admin_token_v1';
+let TOKEN = localStorage.getItem(TOKEN_KEY) || '';
+let DATA  = null;
+let charts = {};
+
+// ── RELOJ
+function tickClock(){
+  const n = new Date();
+  document.getElementById('clock').textContent =
+    n.toLocaleTimeString('es-PA',{hour12:false});
+}
+setInterval(tickClock, 1000); tickClock();
+
+// ── LOGIN
+document.getElementById('pwd-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});
+
+async function doLogin(){
+  const pwd = document.getElementById('pwd-input').value;
+  const err = document.getElementById('login-error');
+  err.textContent = '';
+  try {
+    const r = await fetch('/api/admin/login', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ password: pwd })
+    });
+    const d = await r.json();
+    if (d.ok){
+      TOKEN = d.token;
+      localStorage.setItem(TOKEN_KEY, TOKEN);
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('dashboard').style.display   = 'block';
+      loadData();
+    } else {
+      err.textContent = '✕ ' + (d.error || 'Acceso denegado');
+    }
+  } catch(e){
+    err.textContent = '✕ Error de conexión';
+  }
+}
+
+function logout(){
+  localStorage.removeItem(TOKEN_KEY);
+  TOKEN = '';
+  location.reload();
+}
+
+// ── CARGA DE DATOS
+async function loadData(){
+  document.getElementById('loader').classList.remove('hidden');
+  try {
+    const r = await fetch('/api/admin/data?token=' + TOKEN);
+    if (r.status === 401){ logout(); return; }
+    DATA = await r.json();
+    renderAll();
+  } catch(e){
+    console.error('Error cargando datos:', e);
+  }
+  setTimeout(()=> document.getElementById('loader').classList.add('hidden'), 400);
+}
+
+function renderAll(){
+  renderKPIs();
+  renderCharts();
+  renderMensajes();
+  renderWaitlist();
+  renderIntel();
+}
+
+// ── KPIs
+function renderKPIs(){
+  const k = DATA.kpis;
+  animNum('kpi-waitlist',  k.waitlist);
+  animNum('kpi-contactos', k.contactos);
+  animNum('kpi-clics',     k.clics);
+  animNum('kpi-identified', DATA.inteligencia?.length || 0);
+
+  // Badge de no leídos
+  const unread = DATA.mensajes?.filter(m => !m.leido).length || 0;
+  document.getElementById('unread-badge').textContent = unread;
+}
+
+function animNum(id, target){
+  const el = document.getElementById(id);
+  const step = Math.ceil(target / 30);
+  let cur = 0;
+  const iv = setInterval(()=>{
+    cur = Math.min(cur + step, target);
+    el.textContent = cur.toLocaleString();
+    if (cur >= target) clearInterval(iv);
+  }, 30);
+}
+
+// ── GRÁFICAS
+function renderCharts(){
+  const cOpts = (dark) => ({
+    responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{ display:false }, tooltip:{ backgroundColor:'#0d1117', titleColor:'#e8edf2', bodyColor:'#8899a8', borderColor:'#1e2830', borderWidth:1 }},
+    scales:{
+      x:{ grid:{ color:'rgba(255,255,255,.04)' }, ticks:{ color:'#4a5a68', font:{ family:"'JetBrains Mono'" } }},
+      y:{ grid:{ color:'rgba(255,255,255,.04)' }, ticks:{ color:'#4a5a68', font:{ family:"'JetBrains Mono'" } }}
+    }
+  });
+
+  // Clics por sección
+  if (charts.clicks) charts.clicks.destroy();
+  const ccs = DATA.clicksPorSeccion || [];
+  charts.clicks = new Chart(document.getElementById('chart-clicks'), {
+    type:'bar',
+    data:{
+      labels: ccs.map(r => r.seccion.replace(/_/g,' ')),
+      datasets:[{ data: ccs.map(r => r.total), backgroundColor:'rgba(0,212,255,.7)', borderColor:'#00d4ff', borderWidth:1, borderRadius:4 }]
+    },
+    options: cOpts()
+  });
+
+  // Actividad diaria
+  if (charts.daily) charts.daily.destroy();
+  const ad = DATA.actividadDiaria || [];
+  charts.daily = new Chart(document.getElementById('chart-daily'), {
+    type:'line',
+    data:{
+      labels: ad.map(r => r.dia),
+      datasets:[{ data: ad.map(r => r.total), borderColor:'#7b61ff', backgroundColor:'rgba(123,97,255,.1)', tension:.4, fill:true, pointBackgroundColor:'#7b61ff', pointRadius:4 }]
+    },
+    options: cOpts()
+  });
+
+  // Top productos identificados
+  if (charts.top) charts.top.destroy();
+  const tp = DATA.topProductos || [];
+  charts.top = new Chart(document.getElementById('chart-top'), {
+    type:'bar',
+    data:{
+      labels: tp.map(r => r.seccion.replace(/_/g,' ')),
+      datasets:[
+        { label:'Clics', data: tp.map(r => r.clics), backgroundColor:'rgba(0,255,148,.6)', borderRadius:4 },
+        { label:'Clientes únicos', data: tp.map(r => r.clientes_unicos), backgroundColor:'rgba(240,180,41,.5)', borderRadius:4 }
+      ]
+    },
+    options:{ ...cOpts(), plugins:{ ...cOpts().plugins, legend:{ display:true, labels:{ color:'#8899a8', font:{ family:"'JetBrains Mono'", size:11 } } } } }
+  });
+}
+
+// ── MENSAJES
+function renderMensajes(){
+  const list = document.getElementById('mensajes-list');
+  const msgs = DATA.mensajes || [];
+  if (!msgs.length){ list.innerHTML='<div class="empty-state">No hay mensajes aún.</div>'; return; }
+  list.innerHTML = msgs.map(m => `
+    <div class="mensaje-card ${m.leido?'leido':''}" onclick="marcarLeido(${m.id},this)">
+      <div class="msg-avatar">${m.nombre.charAt(0).toUpperCase()}</div>
+      <div>
+        <div class="msg-nombre">${m.leido?'':' <span class="msg-unread"></span>'}${escHtml(m.nombre)}</div>
+        <div class="msg-email">${escHtml(m.email)}</div>
+        <div class="msg-texto">${escHtml(m.mensaje)}</div>
+      </div>
+      <div class="msg-meta">${fmtFecha(m.created_at)}</div>
+    </div>
+  `).join('');
+}
+
+async function marcarLeido(id, el){
+  if (el.classList.contains('leido')) return;
+  el.classList.add('leido');
+  const badge = document.getElementById('unread-badge');
+  badge.textContent = Math.max(0, (parseInt(badge.textContent)||0) - 1);
+  await fetch('/api/admin/data?token='+TOKEN, {
+    method:'PATCH',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ id, leido: 1 })
+  });
+}
+
+// ── WAITLIST
+function renderWaitlist(){
+  const body = document.getElementById('waitlist-body');
+  const list = DATA.listaEspera || [];
+  if (!list.length){ body.innerHTML='<tr><td colspan="4" class="empty-state">Lista vacía.</td></tr>'; return; }
+  body.innerHTML = list.map((r,i) => `
+    <tr>
+      <td style="color:var(--text3);font-family:'JetBrains Mono',monospace">${i+1}</td>
+      <td class="wl-email">${escHtml(r.email)}</td>
+      <td style="color:var(--text2)">${escHtml(r.producto)}</td>
+      <td style="color:var(--text3);font-family:'JetBrains Mono',monospace;font-size:11px">${fmtFecha(r.created_at)}</td>
+    </tr>
+  `).join('');
+}
+
+// ── INTEL DE VENTAS
+function renderIntel(){
+  const body = document.getElementById('intel-body');
+  const list = DATA.inteligencia || [];
+  if (!list.length){
+    body.innerHTML='<tr><td colspan="5" class="empty-state">Aún no hay clientes identificados.<br>Se llenarán cuando alguien se registre y haga clic.</td></tr>';
+    return;
+  }
+  const maxClics = Math.max(...list.map(r=>r.total_clics), 1);
+  body.innerHTML = list.map(r => {
+    const pct = Math.round((r.total_clics / maxClics) * 100);
+    let badge = '';
+    if (r.total_clics >= 5)      badge = '<span class="badge-hot">🔥 HOT</span>';
+    else if (r.total_clics >= 3) badge = '<span class="badge-warm">⚡ WARM</span>';
+    else                          badge = '<span class="badge-new">◉ NEW</span>';
+    const actividad = r.actividad ? r.actividad.split(' | ').slice(0,3).join(' · ') : '—';
+    return `
+      <tr>
+        <td class="intel-email">${escHtml(r.email)}</td>
+        <td>
+          <div class="intel-heat">
+            <div class="heat-bar" style="width:${Math.max(pct,4)}px"></div>
+            <span class="heat-label">${r.total_clics} clics</span>
+            ${badge}
+          </div>
+        </td>
+        <td style="color:var(--accent);font-weight:700">${r.total_clics}</td>
+        <td style="color:var(--text3);font-family:'JetBrains Mono',monospace;font-size:11px">${fmtFecha(r.ultima_visita)}</td>
+        <td style="color:var(--text2);font-size:12px;max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(actividad)}</td>
+      </tr>
+    `;
+  }).join('');
+}
+
+// ── TABS
+function switchTab(id, btn){
+  document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── EXPORTAR CSV
+function exportarCSV(tipo){
+  let rows = [], filename = '';
+  if (tipo === 'mensajes'){
+    filename = 'mensajes.csv';
+    rows = [['ID','Nombre','Email','Mensaje','Leido','Fecha'],
+      ...(DATA.mensajes||[]).map(r=>[r.id,r.nombre,r.email,'"'+r.mensaje.replace(/"/g,'""')+'"',r.leido?'Si':'No',r.created_at])];
+  } else if (tipo === 'waitlist'){
+    filename = 'waitlist.csv';
+    rows = [['ID','Email','Producto','Fecha'],
+      ...(DATA.listaEspera||[]).map(r=>[r.id,r.email,r.producto,r.created_at])];
+  } else if (tipo === 'intel'){
+    filename = 'inteligencia_ventas.csv';
+    rows = [['Email','Clics Totales','Primera Visita','Ultima Visita','Actividad'],
+      ...(DATA.inteligencia||[]).map(r=>[r.email,r.total_clics,r.primera_visita,r.ultima_visita,'"'+(r.actividad||'').replace(/"/g,'""')+'"'])];
+  }
+  const csv = rows.map(r=>r.join(',')).join('\n');
+  const blob = new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+}
+
+// ── HELPERS
+function escHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function fmtFecha(s){
+  try{ return new Date(s).toLocaleDateString('es-PA',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}); }
+  catch(e){ return s; }
+}
+
+// ── INIT: si ya hay token guardado, intentar cargar directo
+window.addEventListener('DOMContentLoaded', ()=>{
+  document.getElementById('loader').classList.add('hidden');
+  if (TOKEN){
+    // Validar token existente
+    fetch('/api/admin/data?token='+TOKEN)
+      .then(r => {
+        if (r.status === 401){ localStorage.removeItem(TOKEN_KEY); TOKEN=''; return; }
+        return r.json();
+      })
+      .then(d => {
+        if (!d || !d.ok) return;
+        DATA = d;
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        renderAll();
+      })
+      .catch(()=>{});
+  }
+});
+</script>
+</body>
+</html>
