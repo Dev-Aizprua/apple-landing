@@ -8,5 +8,13 @@ database_name = "apple-db"
 database_id = "0335aa94-18e6-4dda-be1e-01eece78198c"
 
 [vars]
-# Esta es solo para pruebas locales (la real va por 'secret put')
-ADMIN_PASSWORD = "desarrollo_local"
+ADMIN_PASSWORD      = "Aizpre272727"
+CLOUDINARY_CLOUD    = "doaqu6s6c"
+CLOUDINARY_KEY      = "978137972327483"
+CLOUDINARY_PRESET   = "tienda"
+CLOUDINARY_CARPETA  = "minegocio"
+
+# CLOUDINARY_SECRET se guarda como secret (nunca en el .toml)
+# Ejecutar UNA SOLA VEZ:
+# wrangler pages secret put CLOUDINARY_SECRET
+# Valor: _buFq1SmMHficnXg9ynHCNPRwIU

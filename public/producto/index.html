@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Producto — Apple Landing</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--white:#fff;--off:#f5f5f7;--black:#1d1d1f;--gray:#6e6e73;--blue:#0071e3;--blue-h:#0077ed;}
+body{font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;background:var(--white);color:var(--black);}
+nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.85);backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid rgba(0,0,0,.08);display:flex;align-items:center;justify-content:space-between;padding:0 22px;height:44px;}
+nav .logo svg{width:18px;height:22px;fill:var(--black);display:block;}
+nav .back-btn{font-size:14px;color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:4px;}
+nav .back-btn:hover{text-decoration:underline;}
+
+.product-hero{display:grid;grid-template-columns:1fr 1fr;gap:60px;max-width:1100px;margin:0 auto;padding:60px 40px;}
+@media(max-width:768px){.product-hero{grid-template-columns:1fr;padding:32px 20px;gap:32px;}}
+
+.img-main{width:100%;aspect-ratio:1;object-fit:contain;border-radius:20px;background:var(--off);}
+.img-placeholder{width:100%;aspect-ratio:1;border-radius:20px;background:var(--off);display:flex;align-items:center;justify-content:center;font-size:80px;color:#ccc;}
+
+.prod-category{font-size:13px;font-weight:600;color:var(--blue);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
+.prod-name{font-size:clamp(28px,4vw,48px);font-weight:700;line-height:1.05;letter-spacing:-.5px;margin-bottom:16px;}
+.prod-price{font-size:clamp(22px,3vw,36px);font-weight:700;margin-bottom:24px;}
+.prod-desc{font-size:17px;line-height:1.6;color:var(--gray);margin-bottom:32px;}
+
+.btn-buy{display:inline-block;background:var(--blue);color:#fff;padding:14px 32px;border-radius:980px;font-size:17px;border:none;cursor:pointer;transition:background .2s;text-decoration:none;}
+.btn-buy:hover{background:var(--blue-h);}
+.btn-info{display:inline-block;background:transparent;border:1px solid var(--blue);color:var(--blue);padding:14px 32px;border-radius:980px;font-size:17px;cursor:pointer;transition:all .2s;margin-left:12px;}
+.btn-info:hover{background:var(--blue);color:#fff;}
+
+.cta-group{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:28px;}
+
+.specs-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:32px;}
+.spec-item{background:var(--off);border-radius:12px;padding:16px 18px;}
+.spec-label{font-size:11px;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+.spec-value{font-size:15px;font-weight:600;}
+
+/* MODAL */
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s;}
+.modal-ov.open{opacity:1;pointer-events:all;}
+.modal{background:#fff;border-radius:20px;padding:40px 36px;max-width:440px;width:100%;position:relative;transform:scale(.95);transition:transform .25s;}
+.modal-ov.open .modal{transform:scale(1);}
+.modal-close{position:absolute;top:16px;right:16px;background:#f0f0f5;border:none;border-radius:50%;width:30px;height:30px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#666;}
+.modal h2{font-size:22px;font-weight:700;margin-bottom:6px;}
+.modal p{font-size:15px;color:var(--gray);margin-bottom:20px;}
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:13px;font-weight:500;margin-bottom:5px;}
+.field input{width:100%;padding:10px 14px;border:1px solid #d0d0d8;border-radius:10px;font-size:15px;font-family:inherit;outline:none;transition:border .2s;}
+.field input:focus{border-color:var(--blue);}
+.submit-btn{width:100%;padding:12px;background:var(--blue);color:#fff;border:none;border-radius:980px;font-size:16px;cursor:pointer;transition:background .2s;}
+.submit-btn:hover{background:var(--blue-h);}
+.submit-btn:disabled{background:#aaa;cursor:default;}
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:#1d1d1f;color:#fff;padding:12px 24px;border-radius:980px;font-size:15px;z-index:9999;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* LOADING */
+.loading{text-align:center;padding:100px 20px;color:var(--gray);}
+.error-state{text-align:center;padding:100px 20px;}
+.error-state h2{font-size:28px;font-weight:700;margin-bottom:12px;}
+.error-state p{color:var(--gray);margin-bottom:24px;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="back-btn" href="/">← Tienda</a>
+  <div class="logo">
+    <svg viewBox="0 0 814 1000"><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-57.8-155.5-127.4C46 383.8 -7.7 255.5 -7.7 130.4c0-73.7 25-142.9 70.3-191.2 28-29.8 68.7-46.4 111-46.4 85.7 0 146.6 57.7 191.3 57.7 42.8 0 110.8-60.8 208-60.8l-.2 4.4zm-37.8-152.4c18.3-21.6 31.7-51.5 31.7-81.4 0-4.2-.3-8.4-.9-12.6-30.1 1.2-66 20.1-88.2 43.3-18 19.4-34.6 49.2-34.6 79.5 0 4.5.6 9 1 10.4 1.9.3 5.1.6 8.3.6 27.1 0 60.5-18 82.7-39.8z"/></svg>
+  </div>
+  <div style="width:60px"></div>
+</nav>
+
+<div id="page-content">
+  <div class="loading">Cargando producto...</div>
+</div>
+
+<!-- MODAL COMPRAR -->
+<div class="modal-ov" id="modal-comprar">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h2 id="modal-title">Comprar</h2>
+    <p id="modal-precio" style="font-size:28px;font-weight:700;color:#1d1d1f;margin-bottom:8px;"></p>
+    <p>Envío gratis en pedidos sobre $500.</p>
+    <div class="field" style="margin-top:20px;"><label>Nombre completo</label><input type="text" id="buy-nombre" placeholder="Tu nombre"/></div>
+    <div class="field"><label>Correo electrónico</label><input type="email" id="buy-email" placeholder="correo@ejemplo.com" oninput="setEmail(this.value)"/></div>
+    <button class="submit-btn" id="buy-btn" onclick="submitCompra()">Continuar al pago →</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let PROD = null;
+const userEmail = localStorage.getItem('al_user_email') || null;
+
+// Obtener ID de la URL: /producto/123
+const pathParts = location.pathname.split('/').filter(Boolean);
+const prodId = pathParts[pathParts.length - 1];
+
+async function loadProducto(){
+  const content = document.getElementById('page-content');
+  if(!prodId || isNaN(prodId)){
+    content.innerHTML='<div class="error-state"><h2>Producto no encontrado</h2><p>La URL no es válida.</p><a href="/" class="btn-buy">Volver a la tienda</a></div>';
+    return;
+  }
+  try{
+    const r = await fetch('/api/productos/'+prodId);
+    const d = await r.json();
+    if(!d.ok || !d.producto){
+      content.innerHTML='<div class="error-state"><h2>Producto no encontrado</h2><p>Este producto no está disponible.</p><a href="/" class="btn-buy">Volver a la tienda</a></div>';
+      return;
+    }
+    PROD = d.producto;
+    document.title = PROD.nombre + ' — Apple Landing';
+    renderProducto();
+    trackVista();
+  } catch(e){
+    content.innerHTML='<div class="error-state"><h2>Error de conexión</h2><p>Intenta de nuevo.</p></div>';
+  }
+}
+
+function renderProducto(){
+  const p = PROD;
+  document.getElementById('page-content').innerHTML = `
+    <div class="product-hero">
+      <div>
+        ${p.imagen_url
+          ? `<img class="img-main" src="${esc(p.imagen_url)}" alt="${esc(p.nombre)}"/>`
+          : `<div class="img-placeholder">📦</div>`}
+      </div>
+      <div>
+        <div class="prod-category">${esc(p.categoria)}</div>
+        <h1 class="prod-name">${esc(p.nombre)}</h1>
+        <div class="prod-price">${esc(p.precio)}</div>
+        ${p.descripcion ? `<p class="prod-desc">${esc(p.descripcion)}</p>` : ''}
+        <div class="cta-group">
+          <button class="btn-buy" onclick="abrirCompra()">Comprar</button>
+          <a class="btn-info" href="/">Ver más productos</a>
+        </div>
+        <div style="font-size:13px;color:var(--gray);">
+          <span style="color:var(--blue);">✓</span> Disponible · Envío gratis +$500 · Garantía 1 año
+        </div>
+      </div>
+    </div>`;
+}
+
+function abrirCompra(){
+  if(!PROD) return;
+  track('producto_'+PROD.id, 'comprar');
+  document.getElementById('modal-title').textContent = 'Comprar ' + PROD.nombre;
+  document.getElementById('modal-precio').textContent = PROD.precio;
+  if(userEmail) document.getElementById('buy-email').value = userEmail;
+  document.getElementById('modal-comprar').classList.add('open');
+}
+function closeModal(){ document.getElementById('modal-comprar').classList.remove('open'); }
+document.getElementById('modal-comprar').addEventListener('click',e=>{ if(e.target.id==='modal-comprar') closeModal(); });
+
+async function submitCompra(){
+  const nombre = document.getElementById('buy-nombre').value.trim();
+  const email  = document.getElementById('buy-email').value.trim();
+  if(!nombre||!email){ showToast('Completa todos los campos'); return; }
+  setEmail(email);
+  const btn = document.getElementById('buy-btn');
+  btn.disabled=true; btn.textContent='Enviando...';
+  try{
+    await fetch('/api/contacto',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nombre,email,mensaje:'Interés de compra: '+PROD.nombre+' ('+PROD.precio+')'})});
+  } catch(_){}
+  closeModal();
+  showToast('¡Gracias '+nombre+'! Te contactamos pronto.');
+  btn.disabled=false; btn.textContent='Continuar al pago →';
+}
+
+async function track(sec, acc){
+  const email = localStorage.getItem('al_user_email');
+  try{
+    await fetch('/api/clicks',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({seccion:sec,accion:acc,email})});
+  } catch(_){}
+}
+function trackVista(){ track('producto_'+prodId,'vista'); }
+function setEmail(v){ const e=v.trim().toLowerCase(); if(e.includes('@')) localStorage.setItem('al_user_email',e); }
+function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3200); }
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+loadProducto();
+</script>
+</body>
+</html>

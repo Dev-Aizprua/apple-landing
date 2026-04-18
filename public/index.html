@@ -33,7 +33,7 @@
     .btn-outline-white { border: 1px solid rgba(255,255,255,.6); color: #fff; padding: 10px 22px; border-radius: 980px; font-size: 17px; background: transparent; text-decoration: none; cursor: pointer; transition: background .2s; display: inline-block; }
     .btn-outline-white:hover { background: rgba(255,255,255,.12); }
 
-    /* SECCIONES */
+    /* SECCIONES HERO */
     section { position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; text-align: center; }
     .hero-iphone { background: var(--off-white); padding: 60px 20px 0; min-height: 100svh; }
     .hero-iphone .eyebrow { font-size: clamp(28px,6vw,56px); font-weight: 700; letter-spacing: -.5px; }
@@ -41,16 +41,110 @@
     .cta-row { margin-top: 22px; display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
     .phones-img { margin-top: 40px; width: min(600px, 90vw); animation: floatUp 1.2s cubic-bezier(.22,.61,.36,1) both; }
     @keyframes floatUp { from { transform: translateY(60px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
     .hero-macbook { background: #000; padding: 80px 20px; min-height: 60svh; justify-content: center; }
     .hero-macbook .eyebrow { font-size: clamp(32px,6vw,64px); font-weight: 700; color: #fff; }
     .hero-macbook .tagline { margin-top: 8px; font-size: clamp(19px,3vw,32px); color: rgba(255,255,255,.75); }
     .hero-macbook .sub { margin-top: 4px; font-size: clamp(14px,2vw,19px); color: rgba(255,255,255,.4); }
     .macbook-img { margin-top: 50px; width: min(700px, 85vw); opacity: 0; animation: fadeIn 1s .3s ease both; }
     @keyframes fadeIn { from { opacity: 0; transform: scale(.97); } to { opacity: 1; transform: scale(1); } }
+
     .hero-ipad { background: linear-gradient(160deg,#e8f0ff 0%,#f0e8ff 100%); padding: 70px 20px 0; min-height: 70svh; }
     .hero-ipad .eyebrow { font-size: clamp(30px,6vw,60px); font-weight: 700; }
     .hero-ipad .tagline { margin-top: 8px; font-size: clamp(17px,2.8vw,28px); opacity: .75; }
     .ipad-img { margin-top: 44px; width: min(500px, 85vw); animation: floatUp 1s .2s cubic-bezier(.22,.61,.36,1) both; }
+
+    /* ══ SECCIÓN CATÁLOGO DINÁMICO ══ */
+    .catalogo-section {
+      background: var(--white);
+      padding: 80px 20px;
+    }
+    .catalogo-section .section-eyebrow {
+      font-size: 13px; font-weight: 600; color: var(--blue);
+      text-transform: uppercase; letter-spacing: .08em;
+      margin-bottom: 10px;
+    }
+    .catalogo-section h2 {
+      font-size: clamp(28px,5vw,48px); font-weight: 700;
+      letter-spacing: -.5px; margin-bottom: 8px;
+    }
+    .catalogo-section .section-sub {
+      font-size: 17px; color: var(--gray); margin-bottom: 48px;
+    }
+
+    /* FILTROS */
+    .filtros {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      justify-content: center; margin-bottom: 40px;
+    }
+    .filtro-btn {
+      padding: 7px 18px; border-radius: 980px;
+      border: 1px solid #d0d0d8; background: transparent;
+      font-size: 14px; cursor: pointer; transition: all .2s;
+      font-family: inherit; color: var(--black);
+    }
+    .filtro-btn:hover { border-color: var(--blue); color: var(--blue); }
+    .filtro-btn.active { background: var(--black); color: #fff; border-color: var(--black); }
+
+    /* GRID DE PRODUCTOS */
+    .prod-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(280px, 90vw), 1fr));
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .prod-card {
+      background: var(--off-white); border-radius: 20px;
+      overflow: hidden; cursor: pointer;
+      transition: transform .3s, box-shadow .3s;
+      text-decoration: none; color: inherit;
+      display: flex; flex-direction: column;
+    }
+    .prod-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,.1); }
+    .prod-card-img {
+      width: 100%; aspect-ratio: 1;
+      object-fit: contain; padding: 24px;
+      background: var(--off-white);
+    }
+    .prod-card-img-placeholder {
+      width: 100%; aspect-ratio: 1;
+      background: var(--off-white);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 64px; color: #ccc;
+    }
+    .prod-card-body { padding: 20px 22px 24px; background: var(--white); flex: 1; display: flex; flex-direction: column; }
+    .prod-card-cat { font-size: 11px; font-weight: 600; color: var(--blue); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 4px; }
+    .prod-card-name { font-size: 17px; font-weight: 700; margin-bottom: 6px; line-height: 1.2; }
+    .prod-card-desc { font-size: 13px; color: var(--gray); line-height: 1.5; flex: 1; margin-bottom: 14px; }
+    .prod-card-footer { display: flex; align-items: center; justify-content: space-between; }
+    .prod-card-price { font-size: 17px; font-weight: 700; }
+    .prod-card-cta {
+      background: var(--blue); color: #fff;
+      padding: 7px 16px; border-radius: 980px;
+      font-size: 13px; font-weight: 500;
+      border: none; cursor: pointer; transition: background .2s;
+      font-family: inherit;
+    }
+    .prod-card-cta:hover { background: var(--blue-hover); }
+
+    /* Estado vacío / cargando */
+    .catalogo-empty {
+      text-align: center; padding: 60px 20px;
+      color: var(--gray); font-size: 15px;
+      grid-column: 1 / -1;
+    }
+    .catalogo-skeleton {
+      background: var(--off-white); border-radius: 20px;
+      overflow: hidden; animation: shimmer 1.5s infinite;
+    }
+    .catalogo-skeleton .sk-img { width: 100%; aspect-ratio: 1; background: #e8e8ec; }
+    .catalogo-skeleton .sk-body { padding: 20px 22px; }
+    .catalogo-skeleton .sk-line { height: 12px; border-radius: 6px; background: #e8e8ec; margin-bottom: 10px; }
+    .catalogo-skeleton .sk-line.short { width: 50%; }
+    @keyframes shimmer { 0%,100%{opacity:1} 50%{opacity:.6} }
+
+    /* GRID CARDS (originales) */
     .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px,90vw),1fr)); gap: 12px; padding: 12px; background: var(--off-white); }
     .grid-card { border-radius: 18px; overflow: hidden; background: var(--white); padding: 40px 28px 28px; text-align: center; display: flex; flex-direction: column; align-items: center; min-height: 340px; cursor: pointer; transition: transform .3s; }
     .grid-card:hover { transform: scale(1.01); }
@@ -64,6 +158,8 @@
     .grid-card.dark .card-sub { color: rgba(255,255,255,.55); }
     .card-ctas { display: flex; gap: 14px; margin-top: 14px; flex-wrap: wrap; justify-content: center; }
     .card-img { margin-top: auto; padding-top: 20px; width: min(200px, 70%); }
+
+    /* FOOTER */
     footer { background: var(--off-white); border-top: 1px solid rgba(0,0,0,.1); padding: 28px 22px 40px; font-size: 12px; color: var(--gray); }
     footer .footer-legal { padding-bottom: 12px; border-bottom: 1px solid rgba(0,0,0,.1); line-height: 1.6; }
     footer .footer-links { display: flex; flex-wrap: wrap; margin-top: 16px; }
@@ -71,7 +167,6 @@
     footer .footer-links a:hover { text-decoration: underline; }
     footer .footer-bottom { margin-top: 12px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
     footer .footer-bottom a { color: var(--gray); text-decoration: none; }
-    footer .footer-bottom a:hover { text-decoration: underline; }
 
     /* MODALES */
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 999; display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity .25s; }
@@ -104,7 +199,7 @@
     <li><a href="#hero-iphone" onclick="track('nav','iphone')">iPhone</a></li>
     <li><a href="#hero-macbook" onclick="track('nav','mac')">Mac</a></li>
     <li><a href="#hero-ipad" onclick="track('nav','ipad')">iPad</a></li>
-    <li><a href="#hero-watch" onclick="track('nav','watch')">Watch</a></li>
+    <li><a href="#catalogo" onclick="track('nav','catalogo')">Tienda</a></li>
     <li><a href="#" onclick="openContacto()">Soporte</a></li>
   </ul>
   <div class="nav-icons">
@@ -176,7 +271,31 @@
   </svg>
 </section>
 
-<!-- Grid -->
+<!-- ══ CATÁLOGO DINÁMICO ══ -->
+<section class="catalogo-section" id="catalogo">
+  <div class="section-eyebrow">Catálogo completo</div>
+  <h2>Todos los productos</h2>
+  <p class="section-sub">Explora nuestra selección. Actualizado en tiempo real.</p>
+
+  <div class="filtros" id="filtros">
+    <button class="filtro-btn active" onclick="filtrar('todos',this)">Todos</button>
+    <button class="filtro-btn" onclick="filtrar('iphone',this)">iPhone</button>
+    <button class="filtro-btn" onclick="filtrar('mac',this)">Mac</button>
+    <button class="filtro-btn" onclick="filtrar('ipad',this)">iPad</button>
+    <button class="filtro-btn" onclick="filtrar('watch',this)">Watch</button>
+    <button class="filtro-btn" onclick="filtrar('airpods',this)">AirPods</button>
+    <button class="filtro-btn" onclick="filtrar('accesorios',this)">Accesorios</button>
+  </div>
+
+  <div class="prod-grid" id="prod-grid">
+    <!-- Skeletons mientras carga -->
+    <div class="catalogo-skeleton"><div class="sk-img"></div><div class="sk-body"><div class="sk-line short"></div><div class="sk-line"></div><div class="sk-line short"></div></div></div>
+    <div class="catalogo-skeleton"><div class="sk-img"></div><div class="sk-body"><div class="sk-line short"></div><div class="sk-line"></div><div class="sk-line short"></div></div></div>
+    <div class="catalogo-skeleton"><div class="sk-img"></div><div class="sk-body"><div class="sk-line short"></div><div class="sk-line"></div><div class="sk-line short"></div></div></div>
+  </div>
+</section>
+
+<!-- Grid fija (Watch, AirPods, Mac mini) -->
 <div class="product-grid" id="hero-watch">
   <div class="grid-card dark">
     <span class="card-label">Nuevo</span>
@@ -231,9 +350,8 @@
 <footer>
   <p class="footer-legal">* Los precios son referenciales. Consulta disponibilidad en tu país.</p>
   <div class="footer-links">
-    <a href="#" onclick="openComprar('iPhone 16','$999')">Comprar iPhone</a>
+    <a href="#catalogo">Ver catálogo</a>
     <a href="#" onclick="openWaitlist()">Lista MacBook Neo</a>
-    <a href="#" onclick="openComprar('iPad Pro','$1,299')">Comprar iPad</a>
     <a href="#" onclick="openContacto()">Contacto</a>
   </div>
   <div class="footer-bottom">
@@ -292,15 +410,11 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// ════════════════════════════════════════
-// SISTEMA DE RASTREO — Hoja de Ruta 2
-// ════════════════════════════════════════
-const LS_EMAIL = 'al_user_email'; // clave en localStorage
+// ════════════════════════════════
+// RASTREO + EMAIL localStorage
+// ════════════════════════════════
+let userEmail = localStorage.getItem('al_user_email') || null;
 
-// Recuperar email guardado (si el usuario ya se registró antes)
-let userEmail = localStorage.getItem(LS_EMAIL) || null;
-
-// Pre-rellenar campos si ya tenemos el email
 if (userEmail) {
   document.addEventListener('DOMContentLoaded', () => {
     ['buy-email','waitlist-email','c-email'].forEach(id => {
@@ -310,13 +424,11 @@ if (userEmail) {
   });
 }
 
-// Guardar email cuando el usuario lo ingresa en cualquier campo
 function setUserEmail(val) {
   const v = val.trim().toLowerCase();
   if (v.includes('@')) {
     userEmail = v;
-    localStorage.setItem(LS_EMAIL, v);
-    // Propagar a otros campos abiertos
+    localStorage.setItem('al_user_email', v);
     ['buy-email','waitlist-email','c-email'].forEach(id => {
       const el = document.getElementById(id);
       if (el && !el.value) el.value = v;
@@ -324,7 +436,6 @@ function setUserEmail(val) {
   }
 }
 
-// TRACKING: envía clic CON email si está disponible
 async function track(seccion, accion) {
   try {
     await fetch('/api/clicks', {
@@ -335,9 +446,61 @@ async function track(seccion, accion) {
   } catch(_) {}
 }
 
-// ════════════════════════════════════════
+// ════════════════════════════════
+// CATÁLOGO DINÁMICO
+// ════════════════════════════════
+let todosLosProductos = [];
+let filtroActual = 'todos';
+
+async function cargarCatalogo() {
+  try {
+    const r = await fetch('/api/productos');
+    const d = await r.json();
+    todosLosProductos = d.productos || [];
+    renderCatalogo(todosLosProductos);
+  } catch(e) {
+    document.getElementById('prod-grid').innerHTML =
+      '<div class="catalogo-empty">Error al cargar el catálogo. Intenta recargar la página.</div>';
+  }
+}
+
+function filtrar(categoria, btn) {
+  filtroActual = categoria;
+  document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const filtrados = categoria === 'todos'
+    ? todosLosProductos
+    : todosLosProductos.filter(p => p.categoria === categoria);
+  renderCatalogo(filtrados);
+  track('catalogo_filtro', categoria);
+}
+
+function renderCatalogo(productos) {
+  const grid = document.getElementById('prod-grid');
+  if (!productos.length) {
+    grid.innerHTML = '<div class="catalogo-empty">No hay productos en esta categoría aún.</div>';
+    return;
+  }
+  grid.innerHTML = productos.map(p => `
+    <a class="prod-card" href="/producto/${p.id}" onclick="track('producto_${p.id}','click_card')">
+      ${p.imagen_url
+        ? `<img class="prod-card-img" src="${esc(p.imagen_url)}" alt="${esc(p.nombre)}" loading="lazy"/>`
+        : `<div class="prod-card-img-placeholder">📦</div>`}
+      <div class="prod-card-body">
+        <div class="prod-card-cat">${esc(p.categoria)}</div>
+        <div class="prod-card-name">${esc(p.nombre)}</div>
+        <div class="prod-card-desc">${esc((p.descripcion||'').substring(0,80))}${(p.descripcion||'').length>80?'…':''}</div>
+        <div class="prod-card-footer">
+          <span class="prod-card-price">${esc(p.precio)}</span>
+          <button class="prod-card-cta" onclick="event.preventDefault();event.stopPropagation();openComprar('${esc(p.nombre)}','${esc(p.precio)}')">Comprar</button>
+        </div>
+      </div>
+    </a>`).join('');
+}
+
+// ════════════════════════════════
 // UI HELPERS
-// ════════════════════════════════════════
+// ════════════════════════════════
 function openModal(id)  { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 function showToast(msg) {
@@ -348,10 +511,11 @@ function showToast(msg) {
 document.querySelectorAll('.modal-overlay').forEach(o => {
   o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
 });
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-// ════════════════════════════════════════
-// ACCIONES DE BOTONES
-// ════════════════════════════════════════
+// ════════════════════════════════
+// ACCIONES
+// ════════════════════════════════
 function openMasInfo(titulo, desc) {
   track(titulo.toLowerCase().replace(/ /g,'_'), 'mas_info');
   document.getElementById('info-title').textContent = titulo;
@@ -375,8 +539,7 @@ async function submitCompra() {
   setUserEmail(email);
   try {
     await fetch('/api/contacto', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ nombre, email, mensaje: 'Interés de compra: ' + productoActual })
     });
   } catch(_) {}
@@ -403,15 +566,12 @@ async function submitWaitlist() {
   btn.disabled = true; btn.textContent = 'Guardando...';
   try {
     const r = await fetch('/api/waitlist', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, producto: 'MacBook Neo' })
     });
     const d = await r.json();
     closeModal('modal-waitlist');
     showToast(d.ok ? '¡Listo! Te avisamos cuando esté disponible.' : (d.error || 'Error'));
-    if (d.total) document.getElementById('waitlist-count').innerHTML =
-      '<span class="counter-badge">' + d.total + ' personas en la lista</span>';
   } catch(_) { showToast('Error de conexión'); }
   btn.disabled = false; btn.textContent = 'Unirme a la lista';
 }
@@ -431,8 +591,7 @@ async function submitContacto() {
   btn.disabled = true; btn.textContent = 'Enviando...';
   try {
     const r = await fetch('/api/contacto', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ nombre, email, mensaje })
     });
     const d = await r.json();
@@ -442,7 +601,11 @@ async function submitContacto() {
   btn.disabled = false; btn.textContent = 'Enviar mensaje';
 }
 
-// Contador inicial de waitlist
+// ════════════════════════════════
+// INIT
+// ════════════════════════════════
+cargarCatalogo();
+
 (async () => {
   try {
     const r = await fetch('/api/waitlist');

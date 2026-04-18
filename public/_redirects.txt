@@ -1,0 +1,5 @@
+/admin          /admin/index.html    200
+/admin/*        /admin/index.html    200
+/producto/*     /producto/index.html 200
+/api/*          /api/:splat          200
+/*              /index.html          200
