@@ -635,59 +635,38 @@ function onDrop(e){
 }
 function onFileSelect(e){ const file=e.target.files?.[0]; if(file) subirACloudinary(file); }
 
-async function subirACloudinary(file){
-  const status=document.getElementById('upload-status');
-  const progressWrap=document.getElementById('upload-progress');
-  const progressBar=document.getElementById('progress-bar');
-  const preview=document.getElementById('upload-preview');
-  const previewImg=document.getElementById('preview-img');
-
-  status.textContent='Obteniendo firma segura...';
-  status.style.color='var(--accent)';
-  progressWrap.style.display='block';
-  progressBar.style.width='10%';
-
-  try{
-    // 1. Obtener firma del servidor
-    const signR=await fetch('/api/cloudinary-sign?token='+TOKEN,{method:'POST'});
-    const sign=await signR.json();
-    if(!sign.ok) throw new Error(sign.error||'Error al firmar');
-
-    progressBar.style.width='30%';
-    status.textContent='Subiendo imagen a Cloudinary...';
-
-    // 2. Subir directamente a Cloudinary
-    const fd=new FormData();
-    fd.append('file',file);
-    fd.append('api_key',sign.api_key);
-    fd.append('timestamp',sign.timestamp);
-    fd.append('signature',sign.signature);
-    fd.append('folder',sign.folder);
-    fd.append('upload_preset',sign.preset);
-
-    const cloudR=await fetch(`https://api.cloudinary.com/v1_1/${sign.cloud}/image/upload`,{method:'POST',body:fd});
-    const cloudData=await cloudR.json();
-
-    if(cloudData.error) throw new Error(cloudData.error.message);
-
-    progressBar.style.width='100%';
-    uploadedImageUrl=cloudData.secure_url;
-    uploadedImagePid=cloudData.public_id;
-
-    document.getElementById('prod-imagen-url').value=uploadedImageUrl;
-    document.getElementById('prod-imagen-pid').value=uploadedImagePid;
-
-    previewImg.src=uploadedImageUrl;
-    preview.style.display='block';
-    status.textContent='✓ Imagen subida: '+cloudData.original_filename;
-    status.style.color='var(--accent3)';
-
-    setTimeout(()=>{ progressWrap.style.display='none'; progressBar.style.width='0%'; },2000);
-  } catch(e){
-    status.textContent='✕ Error: '+e.message;
-    status.style.color='var(--red)';
-    progressBar.style.width='0%';
-    progressWrap.style.display='none';
+async function subirACloudinary(file) {
+  const status = document.getElementById('upload-status');
+  const pw     = document.getElementById('upload-progress');
+  const pb     = document.getElementById('progress-bar');
+  const prev   = document.getElementById('upload-preview');
+  status.textContent = 'Subiendo imagen...';
+  status.style.color = 'var(--accent)';
+  pw.style.display   = 'block';
+  pb.style.width     = '30%';
+  try {
+    const fd = new FormData();
+    fd.append('file', file);
+    pb.style.width = '60%';
+    const r = await fetch('/api/cloudinary-sign?token=' + TOKEN, {
+      method: 'POST',
+      body:   fd
+    });
+    const d = await r.json();
+    if (!d.ok) throw new Error(d.error || 'Error al subir');
+    pb.style.width = '100%';
+    document.getElementById('prod-imagen-url').value = d.url;
+    document.getElementById('prod-imagen-pid').value = d.public_id;
+    document.getElementById('preview-img').src = d.url;
+    prev.style.display = 'block';
+    status.textContent = '✓ Imagen subida correctamente';
+    status.style.color = 'var(--accent3)';
+    setTimeout(() => { pw.style.display = 'none'; pb.style.width = '0%'; }, 2000);
+  } catch (e) {
+    status.textContent = '✕ Error: ' + e.message;
+    status.style.color = 'var(--red)';
+    pb.style.width     = '0%';
+    pw.style.display   = 'none';
   }
 }
 
