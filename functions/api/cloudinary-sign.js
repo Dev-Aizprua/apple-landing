@@ -1,17 +1,23 @@
 // functions/api/cloudinary-sign.js
-// Upload UNSIGNED a Cloudinary — igual que Elegance (sin firma, sin secret)
-// El preset "tienda" debe estar en modo UNSIGNED en tu cuenta Cloudinary
+// Modo proxy: recibe el archivo del frontend, lo sube a Cloudinary con preset unsigned
+// FIX: validación de sesión con Date JS (no SQLite string compare)
 
 async function validarToken(token, env) {
-  if (!token) return false;
+  if (!token) return { valido: false, razon: 'Token vacío' };
   try {
     const { results } = await env.DB.prepare(
       "SELECT token, expires_at FROM admin_sessions WHERE token = ?"
     ).bind(token).all();
-    if (!results.length) return false;
-    if (new Date() > new Date(results[0].expires_at)) return false;
-    return true;
-  } catch (e) { return false; }
+
+    if (!results.length) return { valido: false, razon: 'Token no encontrado' };
+
+    if (new Date() > new Date(results[0].expires_at)) {
+      return { valido: false, razon: 'Sesión expirada' };
+    }
+    return { valido: true };
+  } catch (err) {
+    return { valido: false, razon: 'Error BD: ' + err.message };
+  }
 }
 
 export async function onRequestPost({ request, env }) {
@@ -19,59 +25,60 @@ export async function onRequestPost({ request, env }) {
     const url   = new URL(request.url);
     const token = url.searchParams.get('token');
 
-    if (!await validarToken(token, env)) {
-      return Response.json({ ok: false, error: 'Sesión no válida' }, { status: 401 });
+    // 1. Validar sesión
+    const validacion = await validarToken(token, env);
+    if (!validacion.valido) {
+      return Response.json(
+        { ok: false, error: 'Sesión no válida', detalle: validacion.razon },
+        { status: 401 }
+      );
     }
 
-    // Recibir el archivo del panel
+    // 2. Leer el archivo desde el FormData que manda el frontend
     const formData = await request.formData();
     const file     = formData.get('file');
 
     if (!file) {
-      return Response.json({ ok: false, error: 'No se recibió imagen' }, { status: 400 });
+      return Response.json(
+        { ok: false, error: 'No se encontró el archivo en el FormData' },
+        { status: 400 }
+      );
     }
 
-    // Validar tamaño (máx 10MB)
-    if (file.size > 10 * 1024 * 1024) {
-      return Response.json({ ok: false, error: 'La imagen supera 10 MB' }, { status: 400 });
-    }
+    // 3. Subir a Cloudinary con preset unsigned (sin firma)
+    const cloudName = env.CLOUDINARY_CLOUD   || 'doaqu6s6c';
+    const folder    = env.CLOUDINARY_CARPETA  || 'minegocio';
+    const preset    = env.CLOUDINARY_PRESET   || 'tienda';
 
-    // Validar tipo
-    const tiposOk = ['image/jpeg','image/jpg','image/png','image/webp'];
-    if (!tiposOk.includes(file.type)) {
-      return Response.json({ ok: false, error: 'Formato no permitido. Usa JPG, PNG o WEBP' }, { status: 400 });
-    }
-
-    const CLOUD_NAME = env.CLOUDINARY_CLOUD  || 'doaqu6s6c';
-    const PRESET     = env.CLOUDINARY_PRESET || 'tienda';
-    const FOLDER     = env.CLOUDINARY_CARPETA|| 'minegocio';
-
-    // Subir a Cloudinary con preset UNSIGNED (igual que Elegance)
     const upload = new FormData();
     upload.append('file',          file);
-    upload.append('upload_preset', PRESET);
-    upload.append('folder',        FOLDER);
+    upload.append('upload_preset', preset);
+    upload.append('folder',        folder);
 
-    const res = await fetch(
-      `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+    const res  = await fetch(
+      `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
       { method: 'POST', body: upload }
     );
-
     const data = await res.json();
 
-    if (data.error) {
-      return Response.json({ ok: false, error: data.error.message }, { status: 500 });
+    if (!res.ok || data.error) {
+      return Response.json(
+        { ok: false, error: data.error?.message || 'Error en Cloudinary' },
+        { status: 500 }
+      );
     }
 
+    // 4. Devolver URL al frontend
     return Response.json({
       ok:        true,
       url:       data.secure_url,
       public_id: data.public_id,
-      width:     data.width,
-      height:    data.height,
     });
 
   } catch (e) {
-    return Response.json({ ok: false, error: e.message }, { status: 500 });
+    return Response.json(
+      { ok: false, error: 'Error técnico: ' + e.message },
+      { status: 500 }
+    );
   }
 }
